@@ -1,21 +1,46 @@
-version: 2.1
+version: 2
 
 jobs:
   build:
     docker:
-      - image: '********** CHANGE ME 1 **********'
+      - image: circleci/python:3-stretch
+
     steps:
       - checkout
-      - run:
-          name: Install dependencies and build project
-          command: ********** CHANGE ME 2 **********
+      - run: pwd
+      - run: cd ~ && pwd
+      - run: pip install --user --upgrade pip
+      - run: pip install --user cmake conan
+      - run: chmod 755 .circleci/conan.sh && .circleci/conan.sh
+      - run: mkdir build
+      - run: cd build && conan install .. --build missing
+      - run: cd build && cmake ..
+      - run: cd build && make
+      - persist_to_workspace:
+          root: .
+          paths: 
+            - build/*
+
+  test:
+    docker:
+      - image: circleci/python:3-stretch
+
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: cd build/bin && ls
       - sonarcloud/scan
 
 orbs:
   sonarcloud: sonarsource/sonarcloud@1.0.1
 
 workflows:
-  main:
+  version: 2
+  build_and_test:
     jobs:
-      - build:
+      - build
+      - test:
+          requires:
+            - build
           context: SonarCloud
