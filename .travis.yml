@@ -22,7 +22,8 @@ addons:
   sonarcloud:
     organization: "kaserta"
     token:
-        secure:
+      secure: "FfwWlM4cPDhX7cngIg4S8T0NTFIoalcfScJ6+RvfZk9DXOBx1nYmtP8AkXx5ZAFZ5WNS8EkZ4tKCvtaawphFRYIt+SPxSTX4D77/saVgzd9KEf+sZp8XgwE8QjibxfiumjIQeY1T2qfj4MSQgYVqCUxC5QHobbDde1kTNmB28Ok4jNDgTXcqj8DUrzdmuCIpdprfmIDPZ215Mb7blD8JSNeE/5g4B0igg6ZRSY+NWX7y+d1zSECqZdXarhycDEo9hCWEoA3LV9UYXR/AA04xCU0dG33Z5mJoWbwcSYWUuvuFpGlZVRTTor1GA5ux2B/BR3eem8siQsFtB+7QAmgqvcIPWQVPPvYTcColQ0zXV7vPjpJ+8097ZLzwMHKUwNm+PoT5MO/0CrM3TL7V6QUA+P8M/g29/c08y/lBZBrZ0QLp1ss1SE6p7vDh+L8PieazU9/TckLnF12/wfI6NXPGoJLYoWGEIsIBdBYbajoj7ku60Q6WR1ZIvbMSEZwvmnrPqci7deCT1+4NQRnwzejWdqGSD2eocxIkrea423EPOVbjq/hWn2sMp/rSssN4ybWGf4RpxH18A9r4XXab30Go7pOl9mVQX/wmv+RBFNu/OFNgJ9hCswlGL95EJvBTWkEfQWtjGGXDjpSnYeWEQjEbsPBOduv/HvmdNV46Vn638jA="
+
 stages:
     - build
     - tests
@@ -32,19 +33,19 @@ jobs:
     include :
         - stage: build
           name: "Build"
-          if: branch = dev
+          if: branch != master AND type != cron
           install:
             - docker pull epitechcontent/epitest-docker
           script:
-            - docker run -v $PWD:/build epitechcontent/epitest-docker bash -c ""
+            - docker run -v $PWD:/build epitechcontent/epitest-docker bash -c "mkdir -p build && cd build && conan install --build=missing .. && make && cd .."
 
         - stage: tests
           name: "Unitary Testing"
-          if: branch = dev
+          if: branch != master AND type != cron
           install:
             - docker pull epitechcontent/epitest-docker
           script:
-            - docker run -v $PWD:/test epitechcontent/epitest-docker bash -c ""
+            - docker run -v $PWD:/test epitechcontent/epitest-docker bash -c "mkdir -p build && cd build && conan install --build=missing .. && make all test && cd .. && sonar-scanner"
 
         - stage: deploy
           name: "Deployement"
@@ -53,4 +54,4 @@ jobs:
             - ssh-keyscan git.epitech.eu >> ~/.ssh/known_hosts
             - git checkout master
           script:
-            - git push --repo git@git.epitech.eu:/clement.beaubestre@epitech.eu/NWP_myftp_2018 --force
+            - git push --repo git@git.epitech.eu:/clement.beaubestre@epitech.eu/CPP_zia_2019 --force
