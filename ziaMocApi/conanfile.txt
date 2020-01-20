@@ -1,0 +1,12 @@
+[requires]
+OpenSSL/[>=1.0.2]@conan/stable
+rapidjson/[>=1.1]@bincrafters/stable
+rapidxml/[>=1.13]@bincrafters/stable
+
+[generators]
+cmake
+
+[imports]
+bin, *.dll -> ./bin
+lib, *.dylib -> ./bin
+lib, *.lib -> ./bin
