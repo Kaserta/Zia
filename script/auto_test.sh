@@ -11,7 +11,8 @@ mkdir -p build
 cd build
 conan install .. --build=missing
 cmake .. -G "Unix Makefiles"
-make all test
+cmake --build .
+make test
 cd ..
 gcov  $(find build/test/CMakeFiles/Glados.dir -iname "*.cpp.o")
 gcovr -g -e test
