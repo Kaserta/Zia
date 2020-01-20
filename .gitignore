@@ -429,6 +429,7 @@ MigrationBackup/
 
 # Clion
 .idea/
+.vscode/
 cmake-build-debug/
 cmake-build-realease/
 build/
