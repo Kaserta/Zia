@@ -7,15 +7,14 @@
 
 #include <map>
 
-template <typename T>
-class Storage : public std::map<T, T> {
+class Storage : public std::map<std::string, std::string> {
 public:
-    Storage(std::map<T, T> &) {} // assignate the defaults values
+    Storage(std::map<std::string, std::string> &) {} // assignate the defaults values
     void reset(); //reset the value to the defaults ones
     void load(std::string &path); // load the values from file
 
 private:
-    std::map<T, T> m_defaultState;
+    std::map<std::string, std::string> m_defaultState;
 
 };
 
