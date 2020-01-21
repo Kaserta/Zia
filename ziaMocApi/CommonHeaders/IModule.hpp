@@ -6,10 +6,17 @@
 #define ZIA_TEMPO_IMODULE_HPP
 
 #include <string>
+#include <vector>
+#include <memory>
+#include "Storage.hpp"
 
 class IModule {
 public:
     virtual ~IModule() = default;
+
+    IModule &operator<<(std::string &);
+
+    IModule &operator>>(std::string &);
 };
 
 class AModule : public IModule {
@@ -31,6 +38,16 @@ private:
 std::string operator<<(std::string &, AModule &);
 
 std::string operator>>(std::string &, AModule &);
+
+class Mediator {
+public:
+    Mediator();
+    ~Mediator() = default;
+
+private:
+    std::string m_name = "[Mediator]";
+    std::vector<std::shared_ptr<IModule>> m_modules;
+};
 
 class Http : public AModule {
 public:

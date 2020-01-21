@@ -2,7 +2,7 @@
 gtest/[>=1.8]@bincrafters/stable
 rapidjson/[>=1.1.0]@bincrafters/stable
 rapidxml/[>=1.7.0]@bincrafters/stable
-
+libmime/[~=0.1]@DEGoodmanWilson/stable
 
 [generators]
 cmake
