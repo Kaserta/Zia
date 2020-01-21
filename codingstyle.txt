@@ -1,0 +1,57 @@
+Coding style:
+    Pascal case sauf pour fonction et nom de variable.
+
+    Souhaiter :
+        stc::vector<Kfc::Coop::Chicken> l_chickenList; -> Tableau de poulet
+        stc::vector<Kfc::Coop::Chicken> l_chickenArray; -> Tableau de poulet
+
+    Pointeur:
+        Smart pointer only, shared, unique, weak, auto. 
+
+    Code :
+        On code propre on est pas des tech 1.
+        Pas de c.
+        For auto le plus possible.
+
+    Variable global:
+        Constexpr ou const.
+        Ou eventuellement singleton si modifié.
+
+    PUNITION:
+        Lecture de la norme ANSI et une claque.
+        Lecture de la norme RFC 2616 du http.
+
+EXAMPLE:
+    #ifndef MYNAMESPACE_MODULE_HPP_
+    #define MYNAMESPACE_MODULE_HPP_
+
+    #include <iostream>
+    #include "MyMotherClass.hpp"
+
+    namespace MyNameSpace
+    {
+        class Module : public MyMotherClass
+        {
+            public:
+                Module() = default;
+                ~Module() = default;
+
+                void myIssou(int a_lol, string const &a_mdr);
+                int myExampleMethod();
+                virtual myVirtualMethod(string a_xd);
+                bool checker() final;
+                inline int getLol() const {return m_lol;}
+
+            private:
+                int m_lol = 0;
+                int m_xd = 0;
+                int m_issou = 0;
+        };
+    };
+
+    #endif/* !_MODULE_HPP_ */
+
+    void MyNameSpace::Module::myIssou (int a_lol, string const &a_mdr) {
+        string l_str;
+
+    }

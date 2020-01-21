@@ -1,0 +1,50 @@
+dist: trusty
+language: cpp
+compiler: g++
+sudo: require
+services:
+    - docker
+git:
+    depth: false
+
+notifications:
+    email:
+      recipients:
+      - gregory.voloir@epitech.eu
+      - clement.beaubestre@epitech.eu
+      - matthieu.sauer@epitech.eu
+      - florian.lavabre@epitech.eu
+      - yannick.lafosse@epitech.eu
+      on_success: never
+      on_failure: always
+
+stages:
+  - build
+  - tests
+  - deploy
+
+jobs:
+    include :
+        - stage: build
+          name: "Build"
+          if: branch != master AND type != cron
+          install:
+            - docker pull epitechcontent/epitest-docker
+          script:
+            - docker run -v $PWD:/build_app epitechcontent/epitest-docker bash -c "cd build_app && ./script/auto.sh"
+        - stage: tests
+          name: "Unitary Testing"
+          if: branch != master AND type != cron
+          install:
+            - docker pull epitechcontent/epitest-docker
+          script:
+            - docker run -v $PWD:/build_test epitechcontent/epitest-docker bash -c "cd build_test && ./script/auto_test.sh"
+
+        - stage: deploy
+          name: "Deployement"
+          if: branch = master AND type != cron
+          before_script:
+            - ssh-keyscan git.epitech.eu >> ~/.ssh/known_hosts
+            - git checkout master
+          script:
+            - git push --repo git@git.epitech.eu:/clement.beaubestre@epitech.eu/CPP_zia_2019 --force

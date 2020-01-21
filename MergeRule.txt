@@ -1,0 +1,7 @@
+Merge entre feature et branche principale -> Commit auto.
+
+Merge entre branche de partie et dev -> PULL REQUEST.
+
+Merge entre dev et master -> PULL REQUEST.
+
+MERGE SUR MASTER TOUTE LES DEUX SEMAINES.
