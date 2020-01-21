@@ -1,9 +1,13 @@
 include_directories("include/")
 
 add_executable(
-    testfoo
+    Glados
+        "../zia/src/zia.cpp"
         "main.cpp"
 )
+target_link_libraries(Glados CONAN_PKG::gtest)
 
-add_test(NAME testfoo
-         COMMAND testfoo)
+SET(CMAKE_CXX_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage")
+
+add_test(NAME Glados
+         COMMAND Glados)

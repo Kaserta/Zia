@@ -1,0 +1,9 @@
+ADD|MOD|FIX|GIT|DOC|DEL|MERGE
+
+[(sous-partie)]:
+----------------
+ADD:
+
+----------------
+MODIF:
+##LIGNE 72 CHAR MAX.

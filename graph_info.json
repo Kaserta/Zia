@@ -1,0 +1,22 @@
+{
+ "options": [
+  [
+   "gtest:build_gmock",
+   "True"
+  ],
+  [
+   "gtest:no_main",
+   "False"
+  ],
+  [
+   "gtest:shared",
+   "False"
+  ]
+ ],
+ "root": {
+  "name": null,
+  "version": null,
+  "user": null,
+  "channel": null
+ }
+}

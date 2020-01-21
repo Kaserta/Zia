@@ -1,6 +1,7 @@
 include_directories("include/")
 
 add_executable(
-    zia 
+    zia
+        "main.cpp"
         "src/zia.cpp"
 )

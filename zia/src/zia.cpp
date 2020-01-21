@@ -1,7 +1,10 @@
-#include <iostream>
+/*
+** EPITECH PROJECT, 2020
+** Zia
+** File description:
+** zia
+*/
 
-int main()
-{
-    std::cout << "Hello World!" << std::endl;
-	while (1);
+int imnottested() {
+	return 9;
 }
