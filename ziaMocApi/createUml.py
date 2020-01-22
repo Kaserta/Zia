@@ -15,8 +15,8 @@ gen = shutil.which("hpp2plantuml") #checking if command exist
 if gen is None:
     subprocess.run(["pip3", "install", "--user", "hpp2plantuml"]) #installing command if does not exist
 
-sharedHeadersPath = "./"
-sharedHeaders = ["api.hpp", "IModule.hpp"]
+sharedHeadersPath = "./CommonHeaders/"
+sharedHeaders = ["api.hpp", "IModule.hpp", "ModuleManager.hpp"]
 
 sharedTotal = assembleHeaders(sharedHeadersPath, sharedHeaders)
 

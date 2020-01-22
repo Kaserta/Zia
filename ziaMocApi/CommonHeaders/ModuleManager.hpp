@@ -20,8 +20,9 @@ private:
 
     std::string m_pathToConf;
     std::string m_name = "[ModuleManager]";
-    std::vector<std::string> m_moduleList;
-    std::vector<AModule> m_modules;
+    std::vector<std::string> m_moduleList;;
+    std::vector<std::string> m_SharedList;
+    std::vector<std::shared_ptr<AModule>> m_modules;
     std::shared_ptr<Mediator> m_mediator;
 };
 
