@@ -4,12 +4,25 @@
 
 #include "DLSymWrapper.hpp"
 
+typedef struct
+{
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+    unsigned char a;
+} sfColor;
+
 int main(void)
 {
     Zia::Library::DLSymWrapper wrap;
 
-    wrap << "/lib64/libsfml-audio.so";
+    wrap << "/lib64/libcsfml-audio.so";
 
-    auto ptr = wrap.getSymbol<int, int>("alGetError");
+    std::function<void*(const char *)> ptr;
+
+    wrap.getFunction(ptr, "sfMusic_createFromFile");
+    ptr("salut");
+    wrap << "/lib64/libcsfml-graphics.so";
+    sfColor i = wrap.getVariable<sfColor>("sfWhite");
     return 0;
 }
