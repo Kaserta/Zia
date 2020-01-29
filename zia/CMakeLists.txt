@@ -1,3 +1,5 @@
+add_subdirectory(dslym-wrapper)
+
 include_directories("include/")
 
 add_executable(
