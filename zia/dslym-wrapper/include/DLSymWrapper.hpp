@@ -5,7 +5,24 @@
 #ifndef ZIA_DLSYMWRAPPER_HPP
 #define ZIA_DLSYMWRAPPER_HPP
 
-#include "dlfcn.h"
+#ifdef WIN32
+#include <windows.h>
+#include <windef.h>
+#include <atlstr.h>
+#define ZIA_LIB HMODULE
+#define ZIA_LOAD_LIB(str, useless) LoadLibraryA(str)
+#define ZIA_CLOSE_LIB(handle) FreeLibrary(handle)
+#define ZIA_LOAD_SYMBOL(handle, str) GetProcAddress(handle, str)
+#define ZIA_LOAD_ERROR GetLastError()
+#else
+#include <dlfcn.h>
+#define ZIA_LIB void *
+#define ZIA_LOAD_LIB(str, args) dlopen(str, args)
+#define ZIA_CLOSE_LIB(handle) dlclose(handle)
+#define ZIA_LOAD_SYMBOL(handle, str) dlsym(handle, str)
+#define ZZIA_LOAD_ERROR dlerror()
+#endif
+
 #include <string>
 #include <iostream>
 #include <filesystem>
@@ -24,16 +41,16 @@ namespace Zia::Library {
         template<typename T>
         T &getVariable(const std::string &symbol);
 
-        DLSymWrapper &operator<<(const std::filesystem::path &path);
+        DLSymWrapper &operator<<(const std::string &path);
 
     private:
         template<typename T, typename ...Args>
         std::function<T(Args...)> getFunction(const std::string &symbol);
 
-        void loadLibrary(const std::filesystem::path &path);
+        void loadLibrary(const std::string &path);
 
         std::filesystem::path m_path = "";
-        void *m_loadedLibrary = nullptr;
+        ZIA_LIB m_loadedLibrary = nullptr;
     };
 
     // --------------- TEMPLATE IMPLEMENTATION -----------------
@@ -46,7 +63,7 @@ namespace Zia::Library {
 
         if (!m_loadedLibrary)
             std::cerr << "WHAT ARE YOUR DOING YOU MORON?" << std::endl;
-        ret = (size_t) dlsym(m_loadedLibrary, symbol.c_str());
+        ret = (size_t) ZIA_LOAD_SYMBOL(m_loadedLibrary, symbol.c_str());
 
         if (!ret)
             std::cerr << "NO SYMBOL FOUND!!!" << std::endl;
@@ -69,7 +86,7 @@ namespace Zia::Library {
 
         if (!m_loadedLibrary)
             std::cerr << "ti é fada toi" << std::endl;
-        ret = (T *)dlsym(m_loadedLibrary, symbol.c_str());
+        ret = (T *)ZIA_LOAD_SYMBOL(m_loadedLibrary, symbol.c_str());
         if (!ret) {
             std::cerr << "SYMBOL DOES NOT EXIST!" << std::endl;
             throw std::exception();

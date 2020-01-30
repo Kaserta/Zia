@@ -2,31 +2,39 @@
 // Created by azkalaak on 29/01/2020.
 //
 
-#include <dlfcn.h>
 #include <iostream>
 #include "DLSymWrapper.hpp"
+
+#ifdef WIN32
+#define EXPORT extern "C" __declspec(dllexport)
+#else
+#define EXPORT extern "C"
+#endif
 
 using namespace Zia::Library;
 
 DLSymWrapper::~DLSymWrapper()
 {
     if (m_loadedLibrary)
-        dlclose(m_loadedLibrary);
+        ZIA_CLOSE_LIB(m_loadedLibrary);
 }
 
-void DLSymWrapper::loadLibrary(const std::filesystem::path &path)
+void DLSymWrapper::loadLibrary(const std::string &path)
 {
+    std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH: " << path << std::endl;
     if (m_loadedLibrary)
-        dlclose(m_loadedLibrary);
-    m_loadedLibrary = dlopen(path.c_str(), RTLD_LAZY);
+        ZIA_CLOSE_LIB(m_loadedLibrary);
+    m_loadedLibrary = ZIA_LOAD_LIB(path.c_str(), RTLD_LAZY);
     if (!m_loadedLibrary)
-        std::cerr << "ADD EXCEPTION THERE: " << dlerror() << std::endl;
+        std::cerr << "ADD EXCEPTION THERE: " << ZIA_LOAD_ERROR << std::endl;
 }
 
 
 
-DLSymWrapper &DLSymWrapper::operator<<(const std::filesystem::path &path)
+DLSymWrapper &DLSymWrapper::operator<<(const std::string &path)
 {
     loadLibrary(path);
     return *this;
 }
+
+EXPORT char test = 'c';
