@@ -1,3 +1,5 @@
+add_subdirectory("Log")
+
 include_directories("include/")
 
 add_executable(
