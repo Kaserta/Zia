@@ -20,7 +20,7 @@
 #define ZIA_LOAD_LIB(str, args) dlopen(str, args)
 #define ZIA_CLOSE_LIB(handle) dlclose(handle)
 #define ZIA_LOAD_SYMBOL(handle, str) dlsym(handle, str)
-#define ZZIA_LOAD_ERROR dlerror()
+#define ZIA_LOAD_ERROR dlerror()
 #endif
 
 #include <string>

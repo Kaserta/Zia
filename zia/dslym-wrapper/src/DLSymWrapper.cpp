@@ -37,4 +37,4 @@ DLSymWrapper &DLSymWrapper::operator<<(const std::string &path)
     return *this;
 }
 
-EXPORT char test = 'c';
+EXPORT const char test = 'c';

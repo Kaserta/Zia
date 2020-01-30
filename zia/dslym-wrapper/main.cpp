@@ -8,7 +8,7 @@ int main(void)
 {
     Zia::Library::DLSymWrapper wrap;
 
-    wrap << "./dlsym-wrapper.dll";
+    wrap << "../lib/libdlsym-wrapper.so";
     char i = wrap.getVariable<char>("test");
     std::cout << i << std::endl;
     return 0;
