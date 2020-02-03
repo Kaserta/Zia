@@ -82,10 +82,16 @@ namespace Zia::Library {
 
         if (!ret)
             throw Zia::Exceptions::DLSymWrapperException("Symbol '" + symbol + "' does not exist or has not been found.");
+        if (setjmp(jmp_env) == 1)
+            throw Zia::Exceptions::DLSymWrapperException();
+        signal(SIGSEGV, &redirect_signal);
         T (**temp)(Args...) = &tmp;
         auto *ptr = (size_t *) temp;
         *ptr = ret;
-        return std::function<T(Args...)>(tmp);
+        std::function<T(Args...)> retFunc(tmp);
+        signal(SIGSEGV, nullptr);
+
+        return retFunc;
     }
 
     template<typename T, typename ... Args>
