@@ -1,9 +1,12 @@
 include_directories("include/")
+include_directories("../zia/Log/include/")
 
 add_executable(
         Glados
+        "../zia/Log/src/Log.cpp"
         "../zia/src/zia.cpp"
         "main.cpp"
+        "loggerTest.cpp"
 )
 target_link_libraries(Glados CONAN_PKG::gtest)
 

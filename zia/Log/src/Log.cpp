@@ -2,10 +2,10 @@
 // Created by gregory on 29/01/2020.
 //
 
+#include <filesystem>
 #include <fstream>
 #include <ctime>
 #include <iostream>
-#include <algorithm>
 #include <sstream>
 #include <iomanip>
 #include "Log.hpp"
@@ -18,10 +18,15 @@ Log::Log(Log::instanceType type) noexcept : m_line(0), m_nbrWarn(0), m_nbrInfos(
         m_filename = "DEBUG_REPORT.log";
     else if (m_instance == Release)
         m_filename = "report_" + date_str + ".log";
+    bool exist = std::filesystem::exists(m_filename);
     m_fileStream.open(m_filename, std::ofstream::out | std::ofstream::app);
     if (!m_fileStream.is_open()) {
         std::cerr << "Failed to open file : " << m_filename << SYSERROR() << std::endl;
     }
+    if (!exist)
+        m_fileStream << "-------------------------------------" << std::endl;
+    else
+        m_fileStream << std::endl << "-------------------------------------" << std::endl;
 }
 
 Log::~Log() noexcept {
@@ -43,9 +48,8 @@ std::string Log::getCurrentTimeForFileName() {
     std::stringstream stringStream;
     std::string date;
 
-    stringStream << std::put_time(getLocalTime(), "%F_%T"); // ISO 8601 without timezone information.
+    stringStream << std::put_time(getLocalTime(), "%F"); // ISO 8601 without timezone information.
     date = stringStream.str();
-    std::replace(date.begin(), date.end(), ':', '-');
     return date;
 }
 
@@ -70,40 +74,42 @@ void Log::writeDebug(Log::typeLog logType, std::string& msg, const std::string &
     file.erase(0, file.find_last_of("\\/") + 1);
     switch (logType) {
         case WARN:
-            m_fileStream << std::to_string(m_line) + ": " + createTimeStampLog() + "\tWARNING\t(file: " + file + " | func " + funcCalling + " | line " +
-                    lineInFile + ")\t" + msg << std::endl;
+            m_fileStream  << std::endl << std::to_string(m_line) + ": " + createTimeStampLog() + "\tWARNING\t(file: " + file + " | func " + funcCalling + " | line " +
+                    lineInFile + ")\t" + msg;
             m_nbrWarn++;
             break;
         case INFOS:
-            m_fileStream << std::to_string(m_line) + ": " + createTimeStampLog() + "\tINFOS\t(file: " + file + " | func " + funcCalling + " | line " +
-                            lineInFile + ")\t" + msg << std::endl;
+            m_fileStream  << std::endl << std::to_string(m_line) + ": " + createTimeStampLog() + "\tINFOS\t(file: " + file + " | func " + funcCalling + " | line " +
+                            lineInFile + ")\t" + msg;
             m_nbrInfos++;
             break;
         case ERRORS:
-            m_fileStream << std::to_string(m_line) + ": " + createTimeStampLog() + "\tERROR\t(file: " + file + " | func " + funcCalling + " | line " +
-                    lineInFile + ")\t" + msg << std::endl;
+            m_fileStream << std::endl << std::to_string(m_line) + ": " + createTimeStampLog() + "\tERROR\t(file: " + file + " | func " + funcCalling + " | line " +
+                    lineInFile + ")\t" + msg;
             m_nbrError++;
             break;
     }
     m_line++;
+    std::flush(m_fileStream);
 }
 
 void Log::writeRelease(Log::typeLog logType, std::string &msg, const std::string &funcCalling) {
     switch (logType) {
         case WARN:
-            m_fileStream << std::to_string(m_line) + ": " + createTimeStampLog() + "\tWARNING\t(func " + funcCalling + ")\t" + msg << std::endl;
+            m_fileStream  << std::endl << std::to_string(m_line) + ": " + createTimeStampLog() + "\tWARNING\t(func " + funcCalling + ")\t" + msg;
             m_nbrWarn++;
             break;
         case INFOS:
-            m_fileStream << std::to_string(m_line) + ": " + createTimeStampLog() + "\tINFOS\t(func " + funcCalling + ")\t" + msg << std::endl;
+            m_fileStream  << std::endl << std::to_string(m_line) + ": " + createTimeStampLog() + "\tINFOS\t(func " + funcCalling + ")\t" + msg;
             m_nbrInfos++;
             break;
         case ERRORS:
-            m_fileStream << std::to_string(m_line) + ": " + createTimeStampLog() + "\tERROR\t(func " + funcCalling + ")\t" + msg << std::endl;
+            m_fileStream  << std::endl << std::to_string(m_line) + ": " + createTimeStampLog() + "\tERROR\t(func " + funcCalling + ")\t" + msg;
             m_nbrError++;
             break;
     }
     m_line++;
+    std::flush(m_fileStream);
 }
 
 #ifdef DEBUG

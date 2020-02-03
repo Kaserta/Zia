@@ -60,8 +60,8 @@ private:
 
 extern Log LOG;
 
-#define WARNLOG(MSG) LOG.writeLog(Log::WARN, MSG, __FUNCTION__, __FILE__, std::to_string(__LINE__));
-#define INFOSLOG(MSG) LOG.writeLog(Log::INFOS, MSG, __FUNCTION__, __FILE__, std::to_string(__LINE__));
-#define ERRLOG(MSG) LOG.writeLog(Log::ERRORS, MSG, __FUNCTION__, __FILE__, std::to_string(__LINE__));
+#define WARNLOG(MSG) LOG.writeLog(Log::WARN, MSG, __FUNCTION__, __FILE__, std::to_string(__LINE__))
+#define INFOSLOG(MSG) LOG.writeLog(Log::INFOS, MSG, __FUNCTION__, __FILE__, std::to_string(__LINE__))
+#define ERRLOG(MSG) LOG.writeLog(Log::ERRORS, MSG, __FUNCTION__, __FILE__, std::to_string(__LINE__))
 
 #endif //ZIA_LOG_HPP
