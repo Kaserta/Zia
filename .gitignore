@@ -430,5 +430,5 @@ MigrationBackup/
 .idea/
 .vscode/
 cmake-build-debug/
-cmake-build-realease/
+cmake-build-release/
 build/

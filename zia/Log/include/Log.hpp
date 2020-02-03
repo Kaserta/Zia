@@ -10,10 +10,12 @@
 
 #ifdef _WIN32
     #include <windows.h>
-    #define SYSERROR()  GetLastError()
+#include <fstream>
+
+#define SYSERROR()  GetLastError()
 #else
     #include <errno.h>
-    #define SYSERROR()  perror()
+    #define SYSERROR()  errno
 #endif
 
 class Log {
@@ -29,9 +31,9 @@ public:
         ERRORS
     };
 
-    explicit Log(Log::instanceType);
+    explicit Log(Log::instanceType) noexcept;
 
-    ~Log();
+    ~Log() noexcept;
 
     void writeLog(Log::typeLog logType, std::string msg, const std::string &funcCalling, std::string file, const std::string &lineInFile);
 
@@ -47,7 +49,8 @@ private:
     struct tm *getLocalTime();
 
 private:
-    std::string m_buffer;
+    std::ofstream m_fileStream;
+    std::string m_filename;
     uint64_t m_line;
     uint64_t m_nbrError;
     uint64_t m_nbrWarn;
