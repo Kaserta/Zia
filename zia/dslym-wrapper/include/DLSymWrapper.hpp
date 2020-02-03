@@ -27,6 +27,9 @@
 #include <iostream>
 #include <filesystem>
 #include <functional>
+#include <csetjmp>
+#include <csignal>
+#include "ZiaExceptions.hpp"
 
 namespace Zia::Library {
     class DLSymWrapper {
@@ -53,6 +56,18 @@ namespace Zia::Library {
         ZIA_LIB m_loadedLibrary = nullptr;
     };
 
+    // --------------- LONGJMP IMPLEMENTATION ------------------
+
+    static jmp_buf jmp_env;
+
+    static void redirect_signal(int signum)
+    {
+        (void)signum;
+
+        std::signal(signum, nullptr);
+        longjmp(jmp_env, 1);
+    }
+
     // --------------- TEMPLATE IMPLEMENTATION -----------------
 
     template<typename T, typename ...Args>
@@ -62,11 +77,11 @@ namespace Zia::Library {
         T (*tmp)(Args...);
 
         if (!m_loadedLibrary)
-            std::cerr << "WHAT ARE YOUR DOING YOU MORON?" << std::endl;
+            throw Zia::Exceptions::DLSymWrapperException("library not loaded");
         ret = (size_t) ZIA_LOAD_SYMBOL(m_loadedLibrary, symbol.c_str());
 
         if (!ret)
-            std::cerr << "NO SYMBOL FOUND!!!" << std::endl;
+            throw Zia::Exceptions::DLSymWrapperException("Symbol '" + symbol + "' does not exist or has not been found.");
         T (**temp)(Args...) = &tmp;
         auto *ptr = (size_t *) temp;
         *ptr = ret;
@@ -85,12 +100,20 @@ namespace Zia::Library {
         T *ret = nullptr;
 
         if (!m_loadedLibrary)
-            std::cerr << "ti é fada toi" << std::endl;
+            throw Zia::Exceptions::DLSymWrapperException("library not loaded");
         ret = (T *)ZIA_LOAD_SYMBOL(m_loadedLibrary, symbol.c_str());
         if (!ret) {
-            std::cerr << "SYMBOL DOES NOT EXIST!" << std::endl;
-            throw std::exception();
+            throw Zia::Exceptions::DLSymWrapperException("Symbol '" + symbol + "' does not exist or has not been found.");
         }
+        // ------------ setjmp to prevent segfault ------------
+        if (setjmp(jmp_env) == 1)
+            throw Zia::Exceptions::DLSymWrapperException();
+        signal(SIGSEGV, &redirect_signal);
+        auto i = *ret;
+        (void)i;
+        signal(SIGSEGV, nullptr);
+        // ------------ end of setjmp --------------------------
+
         return *ret;
     }
 }

@@ -21,15 +21,12 @@ DLSymWrapper::~DLSymWrapper()
 
 void DLSymWrapper::loadLibrary(const std::string &path)
 {
-    std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH: " << path << std::endl;
     if (m_loadedLibrary)
         ZIA_CLOSE_LIB(m_loadedLibrary);
     m_loadedLibrary = ZIA_LOAD_LIB(path.c_str(), RTLD_LAZY);
     if (!m_loadedLibrary)
-        std::cerr << "ADD EXCEPTION THERE: " << ZIA_LOAD_ERROR << std::endl;
+        throw Zia::Exceptions::DLSymWrapperException("library could not have been loaded.");
 }
-
-
 
 DLSymWrapper &DLSymWrapper::operator<<(const std::string &path)
 {
@@ -37,4 +34,4 @@ DLSymWrapper &DLSymWrapper::operator<<(const std::string &path)
     return *this;
 }
 
-EXPORT const char test = 'c';
+EXPORT char test = 'c';

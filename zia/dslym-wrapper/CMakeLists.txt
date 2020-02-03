@@ -1,4 +1,5 @@
 include_directories(include/)
+include_directories(../include/)
 
 add_library(dlsym-wrapper SHARED src/DLSymWrapper.cpp)
 
