@@ -5,3 +5,5 @@ add_executable(
         "main.cpp"
         "src/zia.cpp"
 )
+
+add_subdirectory(./NetworkWrapper)
