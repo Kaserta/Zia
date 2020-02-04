@@ -8,16 +8,31 @@
 #ifndef SOCKET_HPP_
 #define SOCKET_HPP_
 
+#ifdef WIN32
+#include <windows.h>
+#include <winsock2.h>
+#else
+#include <sys/socket.h>
+#include <netinet/in.h>
+#endif
+
 namespace Zia::Network {
     enum sockType {TCP = 0, UDP = 1};
     class Socket {
     public:
-        Socket(sockType, bool isV6 = false);
+        explicit Socket(sockType, bool isV6 = false);
+        explicit Socket(int sockFd);
         Socket(const Socket &) = delete;
+
+        void bind(int port);
+        void listen(int queueNumber = 1);
+        Socket accept();
 
         ~Socket();
     private:
         int m_socketFd = -1;
+        int m_ipVersion = 0;
+        struct sockaddr_in s = {0};
     };
 }
 

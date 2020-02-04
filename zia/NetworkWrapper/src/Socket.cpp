@@ -11,16 +11,20 @@
 #include <winsock2.h>
 #pragma comment(lib,"ws2_32.lib")
 #define CLOSE_SOCK(sock) closesocket(sock)
-[[constructor]]
-void winSockStartup()
-{
-    WSAStartup(MAKEWORD(2,2),&amp;wsa);
-}
+namespace Zia::Network {
+    [[constructor]]
+    void winSockStartup()
+    {
+        WSADATA wsa;
 
-[[destructor]]
-void winSockCleanup()
-{
-    WSACleanup();
+        WSAStartup(MAKEWORD(2,2),&wsa);
+    }
+
+    [[destructor]]
+    void winSockCleanup()
+    {
+        WSACleanup();
+    }
 }
 #else
 // -------------- Linux ------------------
@@ -38,13 +42,47 @@ using namespace Zia::Network;
 
 Socket::Socket(sockType protocol, bool isV6)
 {
-    int ipVersionType = AF_INET;
-
-    if (isV6)
-        ipVersionType = AF_INET6;
-    m_socketFd = protocol == TCP ? socket(ipVersionType, SOCK_STREAM, IPPROTO_TCP) : socket(ipVersionType, SOCK_DGRAM, IPPROTO_UDP);
+    m_ipVersion = isV6 ? AF_INET6 : AF_INET;
+    m_socketFd = protocol == TCP ? socket(m_ipVersion, SOCK_STREAM, IPPROTO_TCP) : socket(m_ipVersion, SOCK_DGRAM, IPPROTO_UDP);
     if (m_socketFd <= 0)
         throw Zia::Exceptions::NetworkException("Socket could not be created");
+}
+
+Socket::Socket(int sockFd)
+{
+    m_ipVersion = sockFd;
+    if (m_ipVersion <= 0)
+        throw  Zia::Exceptions::NetworkException();
+}
+
+void Socket::bind(int port)
+{
+    int i = 1;
+
+    s.sin_family = m_ipVersion;
+    s.sin_addr.s_addr = INADDR_ANY;
+    s.sin_port = htons(port);
+    if (::setsockopt(m_socketFd, SOL_SOCKET, SO_REUSEADDR, &i, sizeof(i)) == -1)
+        throw Zia::Exceptions::NetworkException("Setsockopt failed!");
+    if (::bind(m_socketFd, (struct sockaddr *) &s, sizeof(s)) == -1)
+        throw Zia::Exceptions::NetworkException("Binding failed!");
+}
+
+void Socket::listen(int queueNumber)
+{
+    if (!queueNumber)
+        throw Zia::Exceptions::NetworkException("Cannot listen a negative number!");
+    ::listen(m_socketFd, queueNumber);
+}
+
+Socket Socket::accept()
+{
+    unsigned int len = sizeof(s);
+    int newSock = ::accept(m_socketFd, (struct sockaddr *)&s, &len);
+
+    if (newSock < 0)
+        throw Zia::Exceptions::NetworkException("Accept error");
+    return Socket(newSock);
 }
 
 Socket::~Socket()
