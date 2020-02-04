@@ -42,10 +42,7 @@ Socket::Socket(sockType protocol, bool isV6)
 
     if (isV6)
         ipVersionType = AF_INET6;
-    if (protocol == TCP)
-        m_socketFd = socket(ipVersionType, SOCK_STREAM, IPPROTO_TCP);
-    else
-        m_socketFd = socket(ipVersionType, SOCK_DGRAM, IPPROTO_UDP);
+    m_socketFd = TCP ? socket(ipVersionType, SOCK_STREAM, IPPROTO_TCP) : socket(ipVersionType, SOCK_DGRAM, IPPROTO_UDP);
     if (m_socketFd <= 0)
         throw Zia::Exceptions::NetworkException("Socket could not be created");
 }
