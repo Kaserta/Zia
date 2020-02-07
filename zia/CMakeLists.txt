@@ -1,3 +1,4 @@
+add_subdirectory(dslym-wrapper)
 add_subdirectory("Log")
 
 include_directories("include/")

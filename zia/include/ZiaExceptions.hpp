@@ -15,6 +15,12 @@ namespace Zia::Exceptions {
     private:
         std::string m_message;
     };
+
+    class DLSymWrapperException : public ZiaException {
+    public:
+        DLSymWrapperException() : ZiaException("[DLSymWrapper]: internal exception.") {}
+        explicit DLSymWrapperException(const std::string &str) : ZiaException("[DLSymWrapper]: " + str) {}
+    };
 }
 
 #endif //ZIA_ZIAEXCEPTIONS_HPP
