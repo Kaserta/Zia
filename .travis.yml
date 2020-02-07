@@ -1,7 +1,6 @@
 dist: trusty
 language: cpp
 compiler: g++
-sudo: require
 services:
     - docker
 git:
