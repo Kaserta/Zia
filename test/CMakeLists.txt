@@ -1,4 +1,5 @@
 include_directories("include/")
+include_directories("../zia/Log/include/")
 
 #####################################
 #           Dlsym-Wrapper           #
@@ -22,10 +23,12 @@ set_target_properties(wrapper_test PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_S
 
 
 add_executable(
-    Glados
+        Glados
+        "../zia/Log/src/Log.cpp"
         "../zia/src/zia.cpp"
         "main.cpp"
         ${DLSYM_TEST_SRC}
+        "loggerTest.cpp"
 )
 add_dependencies(Glados wrapper_test)
 
@@ -35,7 +38,11 @@ else()
 target_link_libraries(Glados CONAN_PKG::gtest dl)
 endif()
 
-SET(CMAKE_CXX_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage")
+if (WIN32)
+    add_definitions(-D_ALLOW_ITERATOR_DEBUG_LEVEL_MISMATCH)
+else ()
+    SET(CMAKE_CXX_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage")
+endif ()
 
 add_test(NAME Glados
         COMMAND Glados)
