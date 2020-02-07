@@ -33,9 +33,9 @@ add_executable(
 add_dependencies(Glados wrapper_test)
 
 if(WIN32)
-target_link_libraries(Glados CONAN_PKG::gtest)
+    target_link_libraries(Glados CONAN_PKG::gtest)
 else()
-target_link_libraries(Glados CONAN_PKG::gtest dl)
+    target_link_libraries(Glados CONAN_PKG::gtest dl)
 endif()
 
 if (WIN32)

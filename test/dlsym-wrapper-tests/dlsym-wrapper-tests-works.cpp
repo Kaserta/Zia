@@ -9,8 +9,8 @@ TEST(dlsym_wrapper_tests, normal_tests)
 {
     Zia::Library::DLSymWrapper wrap;
 
-#ifdef WIN32
-    wrap << "../lib/wrapper_test.dll";
+#ifdef _WIN32
+    wrap << "./wrapper_test.dll";
 #else
     wrap << "../lib/libwrapper_test.so";
 #endif

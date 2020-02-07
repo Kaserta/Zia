@@ -5,7 +5,7 @@
 #ifndef ZIA_DLSYMWRAPPER_HPP
 #define ZIA_DLSYMWRAPPER_HPP
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <windef.h>
 #include <atlstr.h>

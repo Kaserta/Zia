@@ -11,15 +11,15 @@ TEST(dlsym_wrapper_tests, stress_tests)
     Zia::Library::DLSymWrapper wrap;
 
     ASSERT_ANY_THROW(wrap << ":D I'm failing");
-#ifdef WIN32
-    wrap << "../lib/wrapper_test.dll";
+#ifdef _WIN32
+    wrap << "./wrapper_test.dll";
 #else
     wrap << "../lib/libwrapper_test.so";
 #endif
     ASSERT_ANY_THROW(wrap << ":D I'm another fail!");
     ASSERT_ANY_THROW(wrap.getVariable<char>("testChar"));
-#ifdef WIN32
-    wrap << "../lib/wrapper_test.dll";
+#ifdef _WIN32
+    wrap << "./wrapper_test.dll";
 #else
     wrap << "../lib/libwrapper_test.so";
 #endif
