@@ -12,6 +12,7 @@
 #include <cstdlib>
 #pragma comment(lib,"ws2_32.lib")
 #define CLOSE_SOCK(sock) closesocket(sock)
+#define ZIA_SOCKLEN int
 namespace Zia::Network {
 
     void winSockCleanup()
@@ -37,6 +38,7 @@ namespace Zia::Network {
 #include <unistd.h>
 
 #define CLOSE_SOCK(sock) close(sock)
+#define ZIA_SOCKLEN unsigned int
 #endif
 
 #include "ZiaExceptions.hpp"
@@ -81,7 +83,7 @@ void Socket::listen(int queueNumber)
 
 std::shared_ptr<Socket> Socket::accept()
 {
-    int len = sizeof(s);
+     ZIA_SOCKLEN len = sizeof(s);
     int newSock = ::accept(m_socketFd, (struct sockaddr *)&s, &len);
 
     if (newSock < 0)
