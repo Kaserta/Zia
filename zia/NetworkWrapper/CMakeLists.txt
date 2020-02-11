@@ -5,4 +5,4 @@ add_library(
     network-wrapper
         SHARED
         ./src/Socket.cpp
-)
+        src/PollWrap.cpp include/PollWrap.hpp)

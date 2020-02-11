@@ -28,6 +28,8 @@ namespace Zia::Network {
         void listen(int queueNumber = 1);
         Socket accept();
 
+        int getFD() const { return m_socketFd; }
+
         ~Socket();
     private:
         int m_socketFd = -1;
