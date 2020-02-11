@@ -51,7 +51,7 @@ Socket::Socket(sockType protocol, bool isV6)
 Socket::Socket(int sockFd)
 {
     m_socketFd = sockFd;
-    if (m_ipVersion <= 0)
+    if (m_socketFd <= 0)
         throw  Zia::Exceptions::NetworkException();
 }
 
