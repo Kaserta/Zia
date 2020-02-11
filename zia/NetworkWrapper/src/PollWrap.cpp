@@ -16,10 +16,8 @@ void PollWrap::removeFromWatch(const std::shared_ptr<Socket>& socket)
 {
     for (auto i = m_socketStorage.begin(); i != m_socketStorage.end(); ++i) {
         if (std::get<0>(*i) == socket) {
-            auto j = i;
-            ++i;
-            m_socketStorage.erase(j);
-            --i;
+            m_socketStorage.erase(i);
+            i = m_socketStorage.begin();
         }
     }
 }
