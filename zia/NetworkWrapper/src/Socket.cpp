@@ -63,7 +63,11 @@ Socket::Socket(int sockFd)
 
 void Socket::bind(int port)
 {
+#if _WIN32
     char i = 1;
+#else
+    int i = 1;
+#endif
 
     s.sin_family = m_ipVersion;
     s.sin_addr.s_addr = INADDR_ANY;
