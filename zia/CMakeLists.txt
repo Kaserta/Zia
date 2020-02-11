@@ -12,5 +12,6 @@ add_executable(
         zia
         "main.cpp"
         "src/zia.cpp"
-)
-target_link_libraries(zia libLog)
+        src/Parser.cpp include/Parser.hpp)
+
+target_link_libraries(zia libLog CONAN_PKG::rapidjson)
