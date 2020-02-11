@@ -16,6 +16,8 @@
 #include <netinet/in.h>
 #endif
 
+#include <memory>
+
 namespace Zia::Network {
     enum sockType {TCP = 0, UDP = 1};
     class Socket {
@@ -26,7 +28,7 @@ namespace Zia::Network {
 
         void bind(int port);
         void listen(int queueNumber = 1);
-        Socket accept();
+        std::shared_ptr<Socket> accept();
 
         int getFD() const { return m_socketFd; }
 

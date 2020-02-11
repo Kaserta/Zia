@@ -75,14 +75,14 @@ void Socket::listen(int queueNumber)
     ::listen(m_socketFd, queueNumber);
 }
 
-Socket Socket::accept()
+std::shared_ptr<Socket> Socket::accept()
 {
     unsigned int len = sizeof(s);
     int newSock = ::accept(m_socketFd, (struct sockaddr *)&s, &len);
 
     if (newSock < 0)
         throw Zia::Exceptions::NetworkException("Accept error");
-    return Socket(newSock);
+    return std::make_shared<Socket>(newSock);
 }
 
 Socket::~Socket()
