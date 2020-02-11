@@ -9,22 +9,26 @@
 #ifdef WIN32
 #include <windows.h>
 #include <winsock2.h>
+#include <cstdlib>
 #pragma comment(lib,"ws2_32.lib")
 #define CLOSE_SOCK(sock) closesocket(sock)
 namespace Zia::Network {
-    [[constructor]]
-    void winSockStartup()
-    {
-        WSADATA wsa;
 
-        WSAStartup(MAKEWORD(2,2),&wsa);
-    }
-
-    [[destructor]]
     void winSockCleanup()
     {
         WSACleanup();
     }
+
+    int winSockStartup() noexcept
+    {
+        WSADATA wsa;
+
+        WSAStartup(MAKEWORD(2,2),&wsa);
+        atexit(winSockCleanup);
+        return 0;
+    }
+
+    static int internal_useless_variable_to_initialise_winsock_because_i_have_no_choice = winSockStartup();
 }
 #else
 // -------------- Linux ------------------
@@ -57,7 +61,7 @@ Socket::Socket(int sockFd)
 
 void Socket::bind(int port)
 {
-    int i = 1;
+    char i = 1;
 
     s.sin_family = m_ipVersion;
     s.sin_addr.s_addr = INADDR_ANY;
@@ -77,7 +81,7 @@ void Socket::listen(int queueNumber)
 
 std::shared_ptr<Socket> Socket::accept()
 {
-    unsigned int len = sizeof(s);
+    int len = sizeof(s);
     int newSock = ::accept(m_socketFd, (struct sockaddr *)&s, &len);
 
     if (newSock < 0)

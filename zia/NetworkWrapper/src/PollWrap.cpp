@@ -3,12 +3,19 @@
 //
 
 #include "PollWrap.hpp"
+#if _WIN32
+
+#define poll WSAPoll
+#endif
 
 using namespace Zia::Network;
 
 void PollWrap::addToWatch(const std::shared_ptr<Socket>& socket, pollFunc func, short events)
 {
-    struct pollfd pollStruct = {.fd = socket->getFD(), .events = events, .revents = 0};
+    struct pollfd pollStruct = {0};
+    pollStruct.events = events;
+    pollStruct.revents = 0;
+    pollStruct.fd = socket->getFD();
     m_socketStorage.emplace_back(socket, std::move(func), events, pollStruct);
 }
 
