@@ -13,6 +13,8 @@
 #pragma comment(lib,"ws2_32.lib")
 #define CLOSE_SOCK(sock) closesocket(sock)
 #define ZIA_SOCKLEN int
+#define SEND WSASend
+#define MSG_NOSIGNAL 0
 namespace Zia::Network {
 
     void winSockCleanup()
@@ -85,9 +87,23 @@ void Socket::listen(int queueNumber)
     ::listen(m_socketFd, queueNumber);
 }
 
+void Socket::write(const std::string &buffer)
+{
+    ::send(m_socketFd, buffer.c_str(), buffer.size(), MSG_NOSIGNAL);
+}
+
+// CODE NEW BUFFER / RECUP CHETAFI ONES
+void Socket::read(std::string &buffer, size_t sizeToRead)
+{
+    char *buff = new char[sizeToRead];
+    ::recv(m_socketFd, buff, sizeToRead, MSG_NOSIGNAL);
+    buffer = buff;
+    delete[] buff;
+}
+
 std::shared_ptr<Socket> Socket::accept()
 {
-     ZIA_SOCKLEN len = sizeof(s);
+    ZIA_SOCKLEN len = sizeof(s);
     int newSock = ::accept(m_socketFd, (struct sockaddr *)&s, &len);
 
     if (newSock < 0)

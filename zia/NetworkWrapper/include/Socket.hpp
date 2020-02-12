@@ -28,6 +28,8 @@ namespace Zia::Network {
 
         void bind(int port);
         void listen(int queueNumber = 1);
+        void write(const std::string &buffer);
+        void read(std::string &buffer, size_t sizeToRead);
         std::shared_ptr<Socket> accept();
 
         int getFD() const { return m_socketFd; }
