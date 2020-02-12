@@ -6,5 +6,5 @@ add_executable(
         "src/zia.cpp"
 )
 
-add_subdirectory(./NetworkWrapper)
 target_link_libraries(zia network-wrapper)
+add_subdirectory(./NetworkWrapper)

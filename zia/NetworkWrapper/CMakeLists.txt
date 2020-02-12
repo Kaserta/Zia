@@ -3,6 +3,7 @@ include_directories(../include)
 
 add_library(
     network-wrapper
-        SHARED
+        STATIC
         ./src/Socket.cpp
         src/PollWrap.cpp include/PollWrap.hpp)
+

@@ -1,9 +1,14 @@
 #include <iostream>
 #include "NetworkWrapper/include/Socket.hpp"
 #include "NetworkWrapper/include/PollWrap.hpp"
-#include <sys/socket.h>
-#include <memory>
+#if _WIN32
+#include <winsock2.h>
+#include <windows.h>
+#else
 #include <unistd.h>
+#include <sys/socket.h>
+#endif
+#include <memory>
 
 void salut(std::shared_ptr<Zia::Network::Socket> socket, short lebikini)
 {
