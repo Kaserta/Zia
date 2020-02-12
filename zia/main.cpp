@@ -1,6 +1,7 @@
 #include <iostream>
 #include "NetworkWrapper/include/Socket.hpp"
 #include "NetworkWrapper/include/PollWrap.hpp"
+#include "UriParser/include/UriParser.hpp"
 #if _WIN32
 #include <windows.h>
 #include <winsock2.h>
@@ -15,6 +16,9 @@ void salut(std::shared_ptr<Zia::Network::Socket> socket, short lebikini)
     std::shared_ptr<Zia::Network::Socket> i = socket->accept();
     std::string buffer;
     i->read(buffer, 1024);
+    /*std::map<std::string, std::string>*/ std::vector<std::string> parsed_http = UriParser::parse(buffer);
+    for (auto &p :parsed_http)
+        std::cout << p << std::endl;
     std::cout << buffer << std::endl;
     i->write("HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
 }
