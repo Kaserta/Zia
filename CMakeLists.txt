@@ -5,7 +5,7 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
 if (${UNIX})
-	add_definitions("-fPIC -k8")
+	add_definitions("-fPIC -k8 -g3")
 endif()
 
 

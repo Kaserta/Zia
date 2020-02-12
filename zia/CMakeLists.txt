@@ -7,3 +7,4 @@ add_executable(
 )
 
 add_subdirectory(./NetworkWrapper)
+target_link_libraries(zia network-wrapper)
