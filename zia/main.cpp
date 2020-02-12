@@ -2,8 +2,8 @@
 #include "NetworkWrapper/include/Socket.hpp"
 #include "NetworkWrapper/include/PollWrap.hpp"
 #if _WIN32
-#include <winsock2.h>
 #include <windows.h>
+#include <winsock2.h>
 #else
 #include <unistd.h>
 #include <sys/socket.h>
@@ -17,6 +17,10 @@ void salut(std::shared_ptr<Zia::Network::Socket> socket, short lebikini)
     std::cout << "le getfd de l'accept de la socket :" << i->getFD() << std::endl;
     std::cout << socket->getFD() << std::endl;
 
+    std::string buffer;
+    i->read(buffer, 1024);
+    std::cout << buffer << std::endl;
+    i->write("HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
 }
 
 int main()
