@@ -4,10 +4,10 @@
 
 #include "PollWrap.hpp"
 #if _WIN32
-
+#include <winsock2.h>
+#include <windows.h>
 #define poll WSAPoll
 #endif
-
 using namespace Zia::Network;
 
 void PollWrap::addToWatch(const std::shared_ptr<Socket>& socket, pollFunc func, short events)
@@ -15,7 +15,7 @@ void PollWrap::addToWatch(const std::shared_ptr<Socket>& socket, pollFunc func, 
     struct pollfd pollStruct = {0};
     pollStruct.events = events;
     pollStruct.revents = 0;
-    pollStruct.fd = socket->getFD();
+    pollStruct.fd = socket->m_socketFd;
     m_socketStorage.emplace_back(socket, std::move(func), events, pollStruct);
 }
 
@@ -52,7 +52,7 @@ void PollWrap::start()
                 continue;
             --number;
             for (auto &j : m_socketStorage) {
-                if (std::get<0>(j)->getFD() == ptr[i].fd && std::get<2>(j) == ptr[i].events)
+                if (std::get<0>(j)->m_socketFd == ptr[i].fd && std::get<2>(j) == ptr[i].events)
                     std::get<1>(j)(std::get<0>(j), std::get<2>(j));
             }
         }

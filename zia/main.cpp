@@ -14,8 +14,8 @@ void salut(std::shared_ptr<Zia::Network::Socket> socket, short lebikini)
 {
     std::cout << "salut je suis dans salut: mon short est :" << lebikini <<std::endl;
     std::shared_ptr<Zia::Network::Socket> i = socket->accept();
-    std::cout << "le getfd de l'accept de la socket :" << i->getFD() << std::endl;
-    std::cout << socket->getFD() << std::endl;
+    std::cout << "le getfd de l'accept de la socket :" << "HAHA I'm trolling you!" << std::endl;
+    std::cout << "BECAUSE I NOW HAVE A FRIEND" << std::endl;
 
     std::string buffer;
     i->read(buffer, 1024);

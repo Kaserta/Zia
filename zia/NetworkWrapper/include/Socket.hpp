@@ -21,6 +21,7 @@
 namespace Zia::Network {
     enum sockType {TCP = 0, UDP = 1};
     class Socket {
+        friend class PollWrap;
     public:
         explicit Socket(sockType, bool isV6 = false);
         explicit Socket(int sockFd);
@@ -31,8 +32,6 @@ namespace Zia::Network {
         void write(const std::string &buffer);
         void read(std::string &buffer, size_t sizeToRead);
         std::shared_ptr<Socket> accept();
-
-        int getFD() const { return m_socketFd; }
 
         ~Socket();
     private:

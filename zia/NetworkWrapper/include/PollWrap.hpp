@@ -17,6 +17,7 @@
 #include "Socket.hpp"
 
 namespace Zia::Network {
+    class Socket;
     typedef std::function<void(std::shared_ptr<Socket>, short)> pollFunc;
     class PollWrap {
     public:
