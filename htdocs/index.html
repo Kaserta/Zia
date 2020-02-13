@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h1>HELLO WORLD</h1>
+<h1>HOME</h1>
+<button id="myButton" class="float-left submit-button" >Hello there</button>
+<script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+        location.href = "general_kenobi.html";
+    };
+</script>
+<button id="authbutton" class="float-left submit-button"> Se connecter</button>
+<script type="text/javascript">
+    document.getElementById("authbutton").onclick = function() {
+        location.href = "auth.html";
+    };
+</script>
 </body>
 </html>
