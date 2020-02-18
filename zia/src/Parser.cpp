@@ -11,15 +11,47 @@
 
 std::map<std::string, std::string> Parser::parse(const std::string &file) const noexcept
 {
-    std::string ext = file.substr(file.find_last_of(".") + 1);
     std::ifstream stream(file.c_str());
+    std::string ext = file.substr(file.find_last_of(".") + 1);
+    std::string content((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
 
-    if (ext == "json") {
-        std::string json((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
-        return getJson(json);
-    }
+    try {
+        if (ext == "json") return getJson(content);
+        if (ext == "ini") return getIni(file);
+    } catch (...) { /* */ }
 
     return std::map<std::string, std::string>();
+}
+
+/*
+ * INI PARSING
+ */
+
+#include "INIParser.h"
+#include <vector>
+
+std::map<std::string, std::string> Parser::getIni(const std::string &document) const
+{
+    cppiniparser::INIConfig config = cppiniparser::INIParser::Read(document);
+    std::vector<std::string> sections = config.Sections();
+    std::vector<std::string>::const_iterator s = sections.begin();
+
+    std::map<std::string, std::string> result;
+
+    for (; s != sections.end(); ++s) {
+        std::vector<std::string> opts = config.Options(*s);
+        std::vector<std::string>::const_iterator o = opts.begin();
+
+        for (; o != opts.end(); ++o) {
+            std::string key = *s + '.' + *o;
+            std::string value = config.GetOption(*s, *o);
+
+            result.insert(std::pair<std::string, std::string>(key, value));
+        }
+        std::cout << std::endl;
+    }
+
+    return result;
 }
 
 /*

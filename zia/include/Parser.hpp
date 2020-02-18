@@ -13,6 +13,8 @@ public:
     std::map<std::string, std::string> parse(const std::string &) const noexcept;
 
 private:
+    /* INI */
+    std::map<std::string, std::string> getIni(const std::string &) const;
 
     /* JSON */
     std::map<std::string, std::string> getJson(const std::string &) const noexcept;
