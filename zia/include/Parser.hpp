@@ -10,10 +10,13 @@
 
 class Parser {
 public:
-    std::map<std::string, std::string> parse(std::string) const noexcept;
+    std::map<std::string, std::string> parse(const std::string &) const noexcept;
 
 private:
-    std::map<std::string, std::string> getJson(std::string json) const noexcept;
+
+    /* JSON */
+    std::map<std::string, std::string> getJson(const std::string &) const noexcept;
+    std::map<std::string, std::string> Parser::getJsonObject(const std::string &section, const rapidjson::GenericValue<rapidjson::UTF8<char>, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator>> &value) const noexcept;
     std::string getJsonValue(const rapidjson::GenericValue<rapidjson::UTF8<char>, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator>> &value) const noexcept;
 };
 
