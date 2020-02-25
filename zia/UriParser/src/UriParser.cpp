@@ -24,5 +24,8 @@ std::string UriParser::split(const std::string &to_parse, const char &c, int pos
     std::string s;
     while (getline(f, s, c))
         strings.push_back(s);
-    return strings[pos];
+    if (pos <= strings.size()-1)
+        return strings[pos];
+    else
+        return "";
 }
