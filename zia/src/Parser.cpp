@@ -3,6 +3,7 @@
 //
 
 #include "Parser.hpp"
+#include "INIParser.h"
 
 #include <vector>
 #include <sstream>
@@ -26,9 +27,6 @@ std::map<std::string, std::string> Parser::parse(const std::string &file) const 
 /*
  * INI PARSING
  */
-
-#include "INIParser.h"
-#include <vector>
 
 std::map<std::string, std::string> Parser::getIni(const std::string &document) const
 {
@@ -104,7 +102,7 @@ std::string Parser::getJsonValue(const rapidjson::GenericValue<rapidjson::UTF8<c
             return value.IsInt() ? std::to_string(value.GetInt()) : std::to_string(value.GetDouble());
         case e_Array:
             for (auto &a : value.GetArray()) {
-                if (arr.str().length() > 1)
+                if (arr.str().length() > 0)
                     arr << ":";
                 arr << getJsonValue(a);
             }
