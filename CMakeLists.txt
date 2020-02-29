@@ -26,3 +26,4 @@ find_library(dl REQUIRED)
 
 add_subdirectory(zia)
 add_subdirectory(test)
+add_subdirectory(Module)
