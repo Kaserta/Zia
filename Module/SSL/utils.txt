@@ -1,0 +1,9 @@
+password to import and export: zia
+server CiteDor
+mail: florian.lavabre@epitech.eu
+https://www.ibm.com/support/knowledgecenter/SSMNED_5.0.0/com.ibm.apic.cmc.doc/task_apionprem_gernerate_self_signed_openSSL.html
+state code : FR
+state: France
+city : Toulouse
+organization : Etipech
+organizational name : Tao

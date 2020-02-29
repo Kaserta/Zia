@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel=stylesheet type=text/css href="style.css">
+  </head>
+<body>
+<button onclick="backhome()">Home</button>
+<button onclick="playVid()" type="button">Play Video</button>
+<button onclick="pauseVid()" type="button">Pause Video</button>
+<button onclick="restartVid()" type="button"> restart Video</button><br>
+
+<video autoplay=true id="general_grievous" width="1920" height="1080">
+  <source src="general_kenobi.mp4" type="video/mp4">
+  Your browser does not support HTML5 video.
+</video>
+
+<script>
+var vid = document.getElementById("general_grievous");
+function playVid() {
+  vid.play();
+}
+function pauseVid() {
+  vid.pause();
+}
+
+function restartVid() {
+  vid.pause();
+  vid.currentTime = 0;
+  vid.play();
+}
+
+function backfivesecond() {
+  vid.pause();
+  vid.currentTime -= 5;
+  if (vid.currentTime < 0)
+    vid.currentTime = 0;
+  vid.play();
+}
+
+function upfivesecond() {
+  vid.pause();
+  vid.currentTime += 5;
+  if (vid.currentTime > vid.duration)
+    vid.pause();
+  vid.play();
+}
+
+function backhome() {
+  location.href="index.html";
+}
+</script>
+</body>
+</html>
