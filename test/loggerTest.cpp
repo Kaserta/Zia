@@ -20,7 +20,7 @@ TEST(LogLibrary, warningLog) {
     stream.open("report_" + date + ".log");
     while (std::getline(stream, line, '\n'));
     ss2 << std::put_time(std::localtime(&time), "%m/%d %T");
-    ASSERT_EQ(line, "0: " + ss2.str() + "\tWARNING\t(func LogLibrary_warningLog_Test::TestBody)\ttest warning");
+    ASSERT_EQ(line, "0: " + ss2.str() + "\tWARNING\t(func " + __FUNCTION__ + ")\ttest warning");
 }
 
 TEST(LogLibrary, infosLog) {
@@ -37,7 +37,7 @@ TEST(LogLibrary, infosLog) {
     stream.open("report_" + date + ".log");
     while (std::getline(stream, line, '\n'));
     ss2 << std::put_time(std::localtime(&time), "%m/%d %T");
-    ASSERT_EQ(line, "1: " + ss2.str() + "\tINFOS\t(func LogLibrary_infosLog_Test::TestBody)\ttest infos");
+    ASSERT_EQ(line, "1: " + ss2.str() + "\tINFOS\t(func " + __FUNCTION__ + ")\ttest infos");
 }
 
 TEST(LogLibrary, errorLog) {
@@ -54,5 +54,5 @@ TEST(LogLibrary, errorLog) {
     stream.open("report_" + date + ".log");
     while (std::getline(stream, line, '\n'));
     ss2 << std::put_time(std::localtime(&time), "%m/%d %T");
-    ASSERT_EQ(line, "2: " + ss2.str() + "\tERROR\t(func LogLibrary_errorLog_Test::TestBody)\ttest error");
+    ASSERT_EQ(line, "2: " + ss2.str() + "\tERROR\t(func " + __FUNCTION__ + ")\ttest error");
 }

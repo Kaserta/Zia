@@ -10,11 +10,12 @@
 
 #ifdef _WIN32
     #include <windows.h>
-#include <fstream>
+    #include <fstream>
 
 #define SYSERROR()  GetLastError()
 #else
-    #include <errno.h>
+    #include <cerrno>
+    #include <fstream>
     #define SYSERROR()  errno
 #endif
 
