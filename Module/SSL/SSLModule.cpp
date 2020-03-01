@@ -25,13 +25,13 @@ SSLModule::~SSLModule()
 
 void SSLModule::Receive(int socket_fd, std::string request, std::string config)
 {
-    if (socket.getRemoteAddress() == Net::IpAddress::None || socket.getRemoteAddress() == Net::IpAddress::Any)
-        return;
-    std::string certFile = ;//config["SSL"]["Cert"].get<std::string>(); //get certificate.pem
-    std::string keyFile = ;// config["SSL"]["Key"].get<std::string>(); //get key.pem
+    std::ifstream certstream("certifacate.pem");
+    std::ifstream keystream("key.pem");
+    std::string certFile = std::string((std::istreambuf_iterator<char>(certstream)), std::istreambuf_iterator<char>());
+    std::string keyFile =  std::string((std::istreambuf_iterator<char>(keystream)), std::istreambuf_iterator<char>());
 
-    int client = socket.getHandle();
-    this->_port = socket.getRemotePort();
+    int client = socket_fd.getHandle();
+    this->_port = socket_fd.getRemotePort();
 
     if (SSL_CTX_use_certificate_file(this->_ctx, certFile.c_str(), SSL_FILETYPE_PEM) < 1)
         return;
@@ -70,9 +70,7 @@ void SSLModule::Receive(int socket_fd, std::string request, std::string config)
     const std::size_t readSize = 1024;
     std::size_t len = 0;
     for (;;) {
-        if (socket.getRemoteAddress() == Net::IpAddress::None || socket.getRemoteAddress() == Net::IpAddress::Any)
-        return;
-        char	buff[readSize + 1] = {0};
+        char buff[readSize + 1] = {0};
         std::size_t recv = SSL_read(_ssl, buff, readSize);
 
         if (SSL_get_error(_ssl, recv) == SSL_ERROR_WANT_READ)
@@ -85,9 +83,31 @@ void SSLModule::Receive(int socket_fd, std::string request, std::string config)
     }
 }
 
-void SSLModule::Send(int socket_fd, std::string request, std::string config)
+void SSLModule::Send(std::string toSend)
 {
+    int	iResult;
+    bool no_error = true;
 
+    do {
+        iResult = SSL_write(_ssl, toSend.c_str(), toSend.size());
+        switch (SSL_get_error(_ssl, iResult)) {
+            case SSL_ERROR_NONE:
+                break;
+            case SSL_ERROR_ZERO_RETURN:
+            case SSL_ERROR_WANT_READ:
+            case SSL_ERROR_WANT_WRITE:
+                break;
+            case SSL_ERROR_WANT_CONNECT:
+            case SSL_ERROR_WANT_ACCEPT:
+            case SSL_ERROR_WANT_X509_LOOKUP:
+            case SSL_ERROR_SYSCALL:
+            case SSL_ERROR_SSL:
+            default:
+                no_error = false;
+                break;
+        }
+    }
+    while (iResult > 0 && no_error);
 }
 
 
