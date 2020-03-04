@@ -45,7 +45,7 @@ void SSLModule::Receive(int socket_fd, std::string request, std::string config)
     if (_enabled == false)
         return;
     int	iResult;
-    bool	no_error = true;
+    bool no_error = true;
     do {
         iResult = SSL_accept(_ssl);
         switch(SSL_get_error(_ssl, iResult)) {
@@ -72,14 +72,13 @@ void SSLModule::Receive(int socket_fd, std::string request, std::string config)
     for (;;) {
         char buff[readSize + 1] = {0};
         std::size_t recv = SSL_read(_ssl, buff, readSize);
-
         if (SSL_get_error(_ssl, recv) == SSL_ERROR_WANT_READ)
-        break;
+            break;
         buff[recv] = 0;
         request.append(buff, recv);
         len += recv;
         if (recv < readSize)
-        break;
+            break;
     }
 }
 
