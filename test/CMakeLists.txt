@@ -21,6 +21,18 @@ set(
 add_library(wrapper_test SHARED ${DLSYM_LIB_SRC})
 set_target_properties(wrapper_test PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 
+#####################################
+#              Parsing              #
+#####################################
+include_directories("../zia/iniparser/include/")
+
+set(
+        PARSER_TEST_SRC
+        parser-tests/parsing-tests.cpp
+        ../zia/src/Parser.cpp)
+
+file(COPY parser-tests/example.json DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+file(COPY parser-tests/example.ini DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 add_executable(
         Glados
@@ -28,14 +40,16 @@ add_executable(
         "../zia/src/zia.cpp"
         "main.cpp"
         ${DLSYM_TEST_SRC}
+        ${PARSER_TEST_SRC}
         "loggerTest.cpp"
 )
-add_dependencies(Glados wrapper_test)
+
+add_dependencies(Glados wrapper_test cpp-iniparser)
 
 if(WIN32)
-    target_link_libraries(Glados CONAN_PKG::gtest)
+    target_link_libraries(Glados CONAN_PKG::gtest cpp-iniparser CONAN_PKG::rapidjson)
 else()
-    target_link_libraries(Glados CONAN_PKG::gtest dl)
+    target_link_libraries(Glados CONAN_PKG::gtest dl cpp-iniparser CONAN_PKG::rapidjson)
 endif()
 
 if (WIN32)
